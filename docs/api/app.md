@@ -1252,6 +1252,20 @@ Returns `String` - The command-line switch value.
 
 **Note:** When the switch is not present or has no value, it returns empty string.
 
+### `app.enableSecureMode()`
+
+Changes the following `webPreferences` default values:
+- `sandbox: true`
+- `contextIsolation: true`
+- `nativeWindowOpen: true`
+- `enableRemoteModule: false`
+
+The following events are treated as if `event.preventDefault()` was called when emitted without listeners:
+- `new-window`
+- `will-attach-webview`
+
+This method can only be called before app is ready.
+
 ### `app.enableSandbox()` _Experimental_
 
 Enables full sandbox mode on the app.

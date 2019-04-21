@@ -9,6 +9,7 @@
 #include <utility>
 #include <vector>
 
+#include "atom/browser/browser.h"
 #include "atom/browser/native_window.h"
 #include "atom/browser/web_view_manager.h"
 #include "atom/common/native_mate_converters/value_converter.h"
@@ -116,6 +117,8 @@ WebContentsPreferences::WebContentsPreferences(
 
   instances_.push_back(this);
 
+  const bool secure_mode_enabled = Browser::Get()->secure_mode_enabled();
+
   // Set WebPreferences defaults onto the JS object
   SetDefaultBoolIfUndefined(options::kPlugins, false);
   SetDefaultBoolIfUndefined(options::kExperimentalFeatures, false);
@@ -124,10 +127,10 @@ WebContentsPreferences::WebContentsPreferences(
   SetDefaultBoolIfUndefined(options::kNodeIntegrationInWorker, false);
   SetDefaultBoolIfUndefined(options::kDisableHtmlFullscreenWindowResize, false);
   SetDefaultBoolIfUndefined(options::kWebviewTag, false);
-  SetDefaultBoolIfUndefined(options::kSandbox, false);
-  SetDefaultBoolIfUndefined(options::kNativeWindowOpen, false);
-  SetDefaultBoolIfUndefined(options::kEnableRemoteModule, true);
-  SetDefaultBoolIfUndefined(options::kContextIsolation, false);
+  SetDefaultBoolIfUndefined(options::kSandbox, secure_mode_enabled);
+  SetDefaultBoolIfUndefined(options::kNativeWindowOpen, secure_mode_enabled);
+  SetDefaultBoolIfUndefined(options::kEnableRemoteModule, !secure_mode_enabled);
+  SetDefaultBoolIfUndefined(options::kContextIsolation, secure_mode_enabled);
   SetDefaultBoolIfUndefined("javascript", true);
   SetDefaultBoolIfUndefined("images", true);
   SetDefaultBoolIfUndefined("textAreasAreResizable", true);
